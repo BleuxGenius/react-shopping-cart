@@ -7,26 +7,32 @@ import Navigation from './components/Navigation';
 import Products from './components/Products';
 import ShoppingCart from './components/ShoppingCart';
 
+// context
+import {ProductContext, CartContext} from './context/ProductContext';
+
 function App() {
-	const [products] = useState(data);
-	const [cart, setCart] = useState([]);
+	// two state properties
+	const [products] = useState(data); // keep track of available products 
+	const [cart, setCart] = useState([]); // keep track of items in cart 
 
 	const addItem = item => {
-		// add the given item to the cart
+		setCart([...cart, item]);
 	};
 
 	return (
+		<ProductContext.Provider value={{products, addItem}}>
+			<CartContext.Provider value={cart}>
 		<div className="App">
+			{/* component */}
+		
 			<Navigation cart={cart} />
 
 			{/* Routes */}
+			{/* component */}
 			<Route
 				exact
-				path="/"
-				render={() => (
-					<Products
-						products={products}
-						addItem={addItem}
+				path="/" component={Products}
+				
 					/>
 				)}
 			/>
@@ -36,6 +42,8 @@ function App() {
 				render={() => <ShoppingCart cart={cart} />}
 			/>
 		</div>
+		</CartContext.Provider>
+		</ProductContext.Provider>
 	);
 }
 
